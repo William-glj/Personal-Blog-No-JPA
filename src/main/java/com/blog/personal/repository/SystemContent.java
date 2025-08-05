@@ -12,6 +12,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+//Un modelo de datos, que representaba y/o trabajo con información y lógica.
+//Su clase "superior" sería ContentSQL.
 @Repository
 public class SystemContent {
 
@@ -49,8 +51,9 @@ public class SystemContent {
             store.add(new ContentSQL(rs.getInt("id_Publicaciones"),rs.getString("titulo"),rs.getDate("fecha_Creacion")));
 
         }
-
-
+        rs.close();
+        sttm.close();
+        con.close();
         return  List.copyOf(store);
 
     }

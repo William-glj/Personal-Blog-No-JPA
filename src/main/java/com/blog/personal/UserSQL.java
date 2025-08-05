@@ -1,24 +1,7 @@
 package com.blog.personal;
-
+//Modelo de datos, fuera de JPA.
 public class UserSQL {
-    /*
-    Estos atributos reflejan los datos de la entidad Usuarios de MySQL.
 
-    Anteriormente ubicados en la clase SystemUser.
-
-    ¿Por qué es esto?
-
-    En Spring Boot se distinguen tres funcionalidades manejadas por;
-
-    @Controller - Capa de presentación
-    @Repository - Capa de acceso a datos
-    @Service - Capa de negocio
-
-    Ninguna de estas anotaciones controlan los datos en su aspecto físico, esa función la realizan sistemas como JPA,Hibernate..etc.
-
-    Por eso es importante separar el modelo de los datos, las clases o la información de los objetos, del resto. Evitando interferencias.
-
-     */
     private Integer id;
 
     private  String name;

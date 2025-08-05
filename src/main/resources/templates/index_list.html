@@ -6,9 +6,18 @@
 <body>
 <h1>Lista de Publicaciones</h1>
 <ul>
+
+    <!-- html va interpretar cada comando a través de th: similar a cuando pones <php> .
+    each es la terminación utilizada para un bucle foreach,
+    item es un nuevo objeto o terminación y newlist es el objeto pasado por el model.
+     ${} es la terminación referente para cceder a objetos-->
     <li th:each="item : ${newlist}">
-        <span th:text="${item.title}">Título</span> -
-        <span th:text="${#dates.format(item.date, 'dd/MM/yyyy')}">Fecha</span>
+        <!-- separado por {''} escribimos la ruta y luego le implementamos el valor del item -->
+        <a th:href="@{'/api/content/element/' + ${item.id_content}">
+            <!-- cada item tendrá los atributos de su clase ContentSQL -->
+            <span th:text="${item.title}">Título</span> -
+            <span th:text="${#dates.format(item.date, 'dd/MM/yyyy')}">Fecha</span>
+        </a>
     </li>
 </ul>
 </body>

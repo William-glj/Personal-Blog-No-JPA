@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle de Publicación</title>
+</head>
+<body>
+
+<h1><span th:text="${element.title}">Título</span></h1> <h2><span th:text="${#dates.format(element.date, 'dd/MM/yyyy')}">Fecha</span></h2>
+
+<pre>
+  <span th:text="${element.text}">Contenido</span>
+</pre>
+
+</body>
+</html>

@@ -3,6 +3,8 @@ package com.blog.personal;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+//Siguiendo el modelo de trabajo MVC.
+//La clase Content al reflejar una entidad de SQl es un modelo de datos, solo que fuera de JPA.
 public class ContentSQL {
 
     private Integer id_content;

@@ -11,12 +11,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+//Siguiendo el modelo de trabajo MVC.
+//La clase SystemUser es un modelo de datos, que trabajo a la par o se correponde con las funciones de su clase "superior" UserSQL.
 @Repository
 public class SystemUser {
 
     private DataSource dataSource;
 
-
+    //Spring suele exigir un constructor vacío.
     public SystemUser() {
 
     }
@@ -35,25 +37,26 @@ public class SystemUser {
         return dataSource;
     }
 
-    public int searchUser (String nameEx, String passwordEx){
+    public UserSQL searchUser (String nameEx, String passwordEx){
         try {
             Connection con = dataSource.getConnection();
             Statement sttm = con.createStatement();
 
 
-
+            //    "SELECT COUNT(*) FROM usuarios WHERE nombre = '" + nameEx + "' AND contraseña = '" + passwordEx + "'");
             ResultSet rs =  sttm.executeQuery(
-                    "SELECT COUNT(*) FROM usuarios WHERE nombre = '" + nameEx + "' AND contraseña = '" + passwordEx + "'");
+                    "SELECT * FROM usuarios WHERE nombre = '" + nameEx + "' AND contraseña = '" + passwordEx + "' LIMIT 1");
 
 
             if(rs.next()){
 
-                return rs.getInt(1);
+                return new UserSQL(rs.getInt("id_Usuario"), rs.getString("nombre"));
 
             }
 
 
-
+            sttm.close();
+            con.close();
 
 
         } catch (SQLException e){
@@ -61,9 +64,8 @@ public class SystemUser {
                     " instanciar el conector a la base de datos. Revisar el archivo --> application.properties, " +
                     "la base de datos o los parámetros");
         }
-        return 0;
+        return new UserSQL(null, null);
     }
-
 
     public UserSQL findUser (Integer idEx){
         try {
@@ -83,7 +85,8 @@ public class SystemUser {
 
 
 
-
+            sttm.close();
+            con.close();
 
         } catch (SQLException e){
             System.out.println("Fallo: Clase SystemUser error a la hora de" +
