@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Lista de Publicaciones</title>
+</head>
+<body>
+<h1>Lista de Publicaciones</h1>
+<ul>
+    <li th:each="item : ${newlist}">
+        <span th:text="${item.title}">Título</span> -
+        <span th:text="${#dates.format(item.date, 'dd/MM/yyyy')}">Fecha</span>
+    </li>
+</ul>
+</body>
+</html>

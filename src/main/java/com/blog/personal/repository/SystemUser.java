@@ -20,8 +20,14 @@ public class SystemUser {
     public SystemUser() {
 
     }
+
+    //Obligatorio para crear un objeto inyectado en Spring
     @Autowired
     public SystemUser(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
 

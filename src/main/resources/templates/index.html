@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
+    <title>Usuario</title>
 </head>
 <body>
 
-<div class="container">
+<h1>Datos del Usuario</h1>
+<!--
+
+¿Cómo funciona esto?
+usuario -> es el nombre que le hemos dado al objeto desde java, usando el model.
+todos los métodos y atributos existentes en el objeto pasan a ser accesibles mediante su nuevo nombre -> usuario
+th:text indica que la etiqueta span/la que sea será sustituida por el texto que exista en usuario.x
 
 
 
 
-    <h1>Usuario: </h1>  <h1 th:text="${objeto}"></h1>
-
-
-
-
-</div>
-
-
+-->
+<p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
+<p><strong>Nombre:</strong> <span th:text="${usuario.name}"></span></p>
+<p><strong>Contraseña:</strong> <span th:text="${usuario.password}"></span></p>
 
 </body>
 </html>
+
 
 <!--
 
@@ -47,4 +49,3 @@
 
 
 
--->
