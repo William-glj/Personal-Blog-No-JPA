@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Usuario</title>
+</head>
+<body>
+
+<h1>Datos del Usuario</h1>
+<!--
+
+¿Cómo funciona esto?
+usuario -> es el nombre que le hemos dado al objeto desde java, usando el model.
+todos los métodos y atributos existentes en el objeto pasan a ser accesibles mediante su nuevo nombre -> usuario
+th:text indica que la etiqueta span/la que sea será sustituida por el texto que exista en usuario.x
+
+
+
+
+-->
+<p><strong>ID:</strong> <span th:text="${usuario.id}"></span></p>
+<p><strong>Nombre:</strong> <span th:text="${usuario.name}"></span></p>
+<p><strong>Contraseña:</strong> <span th:text="${usuario.password}"></span></p>
+
+</body>
+</html>
+
+
+<!--
+
+
+
+
+    <h2>Formulario de Registro</h2>
+    <form action="/home/api/{1}" method="POST">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" name="nameServer" required>
+
+        <label for="user">Usuario:</label>
+        <input type="text" id="user" name="userServer" required>
+
+        <button type="submit">Enviar</button>
+    </form>
+
+
+
+-->
+
+
+
+
+

@@ -14,7 +14,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 
-//La clase HomeController es la encargada de direccionar los endpoints. Crear las rutas, para las vistas de los usuarios.
+//La clase HomeController es la encargada de direccionar los endpoints.
+//Crear las rutas, para las vistas de los usuarios.
 //Utilizamos controller para poder trabajar sobre las vistas de Thymeleaf
 @Controller
 @RequestMapping("/home")
@@ -33,24 +34,49 @@ public class HomeController {
 
     }
 
-    // localhost:8080/home/api/usuer/x
-    @GetMapping("/api/usuer/{id}")
-    public String webUser (@PathVariable int id, Model model){
 
-        UserSQL user =  systemUser.findUser(id);
-
-      if (user!=null){
-          model.addAttribute("usuario", user); // pasas el objeto a la vista
-
-          return "index";
-
-      } else {
-
-          return "index_no_user";
-      }
-
+    //Una vez se activa el servicio, todas las solicitudes serán recogidas en index.html
+    //La ventana principal y inicial.
+    //Lugar de login.
+    // Para que el servicio funcione, le enviamos un objeto vacio
+    //Ruta   localhost:8080/home
+    @GetMapping
+    public String showHome(Model model){
+        model.addAttribute("userSQL", new UserSQL());
+        return "index";
     }
 
+
+    //Recogemos la información del inicio de sesión.
+    //Estos datos provienen del formulario.
+    //Ruta   localhost:8080/home/api/user
+    @PostMapping("/api/user")
+    public String processUserForm(@ModelAttribute UserSQL userSQL) {
+        System.out.println("Nombre: " + userSQL.getName());
+        System.out.println("Contraseña: " + userSQL.getPassword());
+        return "redirect:/home/api/user/" + userSQL.getName() + "/" + userSQL.getPassword();
+    }
+
+
+    // Funciona
+    // Ruta localhost:8080/home/api/user/nombre/contraseña
+    // Verificamos el usuario
+    @GetMapping("/api/user/{name}/{pssw}")
+    public String webUser(@PathVariable String name, @PathVariable String pssw, Model model) {
+
+        UserSQL user = systemUser.verifyUser(name, pssw);
+
+        UserSQL userFinal = systemUser.findUser(user.getName());
+
+        if (userFinal != null) {
+            model.addAttribute("usuario", userFinal);
+            return "index_user";
+        } else {
+            return "index_no_user";
+        }
+    }
+
+    //Funciona
     // localhost:8080/home/api/content
     @GetMapping("/api/content")
     public String webTitle  (Model model) throws SQLException {
@@ -60,7 +86,7 @@ public class HomeController {
         return "index_list";
     }
 
-
+    //Funciona
     //localhost:8080/home/api/content/element/num
     @GetMapping("/api/content/element/{num}")
     public String webElementRead  (@PathVariable int num, Model model) throws SQLException {
@@ -73,7 +99,6 @@ public class HomeController {
         model.addAttribute("element", content);
         return "index_element_list";
     }
-
 
 
     /*

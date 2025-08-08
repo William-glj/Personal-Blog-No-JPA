@@ -2,14 +2,10 @@ package com.blog.personal.repository;
 
 import com.blog.personal.UserSQL;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 //Siguiendo el modelo de trabajo MVC.
 //La clase SystemUser es un modelo de datos, que trabajo a la par o se correponde con las funciones de su clase "superior" UserSQL.
@@ -37,25 +33,32 @@ public class SystemUser {
         return dataSource;
     }
 
-    public UserSQL searchUser (String nameEx, String passwordEx){
+    public UserSQL verifyUser(String nameEx, String passwordEx){
         try {
             Connection con = dataSource.getConnection();
-            Statement sttm = con.createStatement();
+            PreparedStatement ps = con.prepareStatement(
+                    "SELECT COUNT(*) FROM usuarios WHERE nombre = ? AND contraseña = ?"
+            );
+
+            ps.setString(1, nameEx);
+            ps.setString(2, passwordEx);
+
+            ResultSet rs = ps.executeQuery();
+
+            int countUpdate = 0;
+
+            if (rs.next()) {
+                countUpdate = rs.getInt(1);
 
 
-            //    "SELECT COUNT(*) FROM usuarios WHERE nombre = '" + nameEx + "' AND contraseña = '" + passwordEx + "'");
-            ResultSet rs =  sttm.executeQuery(
-                    "SELECT * FROM usuarios WHERE nombre = '" + nameEx + "' AND contraseña = '" + passwordEx + "' LIMIT 1");
 
 
-            if(rs.next()){
-
-                return new UserSQL(rs.getInt("id_Usuario"), rs.getString("nombre"));
-
+                return new UserSQL(nameEx);
             }
 
 
-            sttm.close();
+
+            ps.close();
             con.close();
 
 
@@ -64,28 +67,30 @@ public class SystemUser {
                     " instanciar el conector a la base de datos. Revisar el archivo --> application.properties, " +
                     "la base de datos o los parámetros");
         }
-        return new UserSQL(null, null);
+        return new UserSQL(null);
     }
 
-    public UserSQL findUser (Integer idEx){
+
+
+    public UserSQL findUser (String  nameEx){
         try {
             Connection con = dataSource.getConnection();
-            Statement sttm = con.createStatement();
+            PreparedStatement ps = con.prepareStatement("SELECT id_Usuario FROM usuarios WHERE nombre = ?");
+
+            ps.setString(1, nameEx);
 
 
-
-            ResultSet rs =  sttm.executeQuery(
-                    "SELECT * FROM usuarios WHERE id_Usuario =" + idEx );
+            ResultSet rs =  ps.executeQuery();
 
 
             if(rs.next()){
 
-                return new UserSQL(rs.getInt("id_Usuario"), rs.getString("nombre"));
+                return new UserSQL(rs.getInt("id_Usuario"), nameEx );
             }
 
 
 
-            sttm.close();
+            ps.close();
             con.close();
 
         } catch (SQLException e){

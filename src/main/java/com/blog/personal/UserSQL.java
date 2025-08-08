@@ -18,6 +18,17 @@ public class UserSQL {
      //   this.password = password;
      }
 
+    public UserSQL ( String nameEx){
+        this.name = nameEx;
+    }
+    public UserSQL ( String nameEx, String passwordEx){
+        this.name = nameEx;
+        this.password = passwordEx;
+    }
+
+
+
+
     public Integer getId() {
         return id;
     }
