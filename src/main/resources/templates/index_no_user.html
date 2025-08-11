@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
 <head>
-    <title>Usuario no encontrado</title>
+    <meta charset="UTF-8">
+    <title>Alerta SweetAlert</title>
+    <!-- Incluir SweetAlert desde CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 
 <h1>El usuario no ha sido reflejado correctamente o no se ha encontrado</h1>
 
+<script>
+    window.addEventListener('load', () => {
+       Swal.fire({
+         title: 'Oops...',
+         text: 'Usuario o contraseña incorrectos',
+         icon: 'error',
+         confirmButtonText: 'Volver'
+       }).then(() => {
+         window.location.href = '/home'; // Redirige al login después del alert
+       });
+     });
+</script>
 
 </body>
 </html>

@@ -5,6 +5,7 @@ import com.blog.personal.UserSQL;
 import com.blog.personal.repository.SystemContent;
 import com.blog.personal.repository.SystemUser;
 import com.blog.personal.service.ContentCRUD;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,9 +41,10 @@ public class HomeController {
     //Lugar de login.
     // Para que el servicio funcione, le enviamos un objeto vacio
     //Ruta   localhost:8080/home
+
     @GetMapping
     public String showHome(Model model){
-        model.addAttribute("userSQL", new UserSQL());
+        model.addAttribute("userSQL",  new UserSQL());
         return "index";
     }
 
@@ -52,9 +54,8 @@ public class HomeController {
     //Ruta   localhost:8080/home/api/user
     @PostMapping("/api/user")
     public String processUserForm(@ModelAttribute UserSQL userSQL) {
-        System.out.println("Nombre: " + userSQL.getName());
-        System.out.println("Contraseña: " + userSQL.getPassword());
-        return "redirect:/home/api/user/" + userSQL.getName() + "/" + userSQL.getPassword();
+
+        return "redirect:/home/api/user/" + userSQL.getName().toLowerCase().trim() + "/" + userSQL.getPassword().toLowerCase().trim();
     }
 
 
@@ -62,34 +63,57 @@ public class HomeController {
     // Ruta localhost:8080/home/api/user/nombre/contraseña
     // Verificamos el usuario
     @GetMapping("/api/user/{name}/{pssw}")
-    public String webUser(@PathVariable String name, @PathVariable String pssw, Model model) {
+    public String webUser(@PathVariable String name, @PathVariable String pssw, Model model, HttpSession session) {
 
         UserSQL user = systemUser.verifyUser(name, pssw);
 
         UserSQL userFinal = systemUser.findUser(user.getName());
 
         if (userFinal != null) {
-            model.addAttribute("usuario", userFinal);
-            return "index_user";
+            session.setAttribute("logUser",userFinal);
+            model.addAttribute("user", userFinal);
+            return "redirect:/home/api/content";
         } else {
             return "index_no_user";
         }
     }
 
+    // Ruta localhost:8080/home/api/user/logout
+    @PostMapping("/api/user/logout")
+    public String logout(HttpSession session) {
+        session.invalidate(); // Elimina la sesión
+        return "redirect:/home"; // Redirige al login o donde prefieras
+    }
+
     //Funciona
     // localhost:8080/home/api/content
     @GetMapping("/api/content")
-    public String webTitle  (Model model) throws SQLException {
-
+    public String webTitle (Model model, HttpSession session) throws SQLException {
+        // Recuperamos el usuario de la sesión
+        UserSQL user = (UserSQL) session.getAttribute("logUser");
+        if (user == null) {
+            // Si no hay usuario logeado, volvemos al login
+            return "redirect:/home";
+        }
+        // Usuario válido: obtenemos los contenidos
         List<ContentSQL> list = contentSQL.titleList();
         model.addAttribute("newlist", list);
+        model.addAttribute("user", user);
         return "index_list";
     }
+
+
 
     //Funciona
     //localhost:8080/home/api/content/element/num
     @GetMapping("/api/content/element/{num}")
-    public String webElementRead  (@PathVariable int num, Model model) throws SQLException {
+    public String webElementRead  (@PathVariable int num, Model model, HttpSession session) throws SQLException {
+
+        UserSQL user = (UserSQL) session.getAttribute("logUser");
+        if (user == null) {
+            // Si no hay usuario logeado, volvemos al login
+            return "redirect:/home";
+        }
 
         //Utilizo la lógica de búsqueda
         ContentCRUD contentCRUD =  new ContentCRUD(contentSQL.getDataSource());
@@ -97,8 +121,21 @@ public class HomeController {
         ContentSQL content = contentCRUD.readContentSQL(num);
         //Envío el objeto
         model.addAttribute("element", content);
+        model.addAttribute("user", user);
         return "index_element_list";
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /*
@@ -116,3 +153,22 @@ public class HomeController {
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
