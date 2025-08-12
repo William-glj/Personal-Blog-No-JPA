@@ -6,10 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -86,15 +83,55 @@ public class ContentCRUD {
             conn.close();
 
         } catch (SQLException ex) {
-            System.out.println("La operación de borrado n la clase ContentCRUD, ha fallado.");
+            System.out.println("La operación de borrado, en la clase ContentCRUD, ha fallado.");
+            ex.printStackTrace();
+        }
+    }
+    public void updateContentSQL(Integer idEx, String titleEx, String contentEx) {
+
+        try  {
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement("UPDATE publicaciones SET titulo = ?, contenido = ? WHERE id_Publicaciones = ?");
+            ps.setString(1, titleEx);
+            ps.setString(2, contentEx);
+            ps.setInt(3, idEx);
+
+            ps.execute();
+
+            ps.close();
+            conn.close();
+
+        } catch (SQLException ex) {
+            System.out.println("La operación de actualización en la clase ContentCRUD ha fallado.");
             ex.printStackTrace();
         }
     }
 
+    public void createContentSQL (String titleEx, String contentEx) {
+
+        try  {
+            Connection conn = dataSource.getConnection();
+            PreparedStatement ps = conn
+                    .prepareStatement
+                            ("INSERT INTO publicaciones (creador, titulo, contenido) VALUE\n" +
+                                    "(?,?,?)");
 
 
 
+            ps.setInt(1, 2);
+            ps.setString(2, titleEx);
+            ps.setString(3, contentEx);
 
+            ps.execute();
+
+            ps.close();
+            conn.close();
+
+        } catch (SQLException ex) {
+            System.out.println("La operación de creación ha fallado en la clase ContentCRU.");
+            ex.printStackTrace();
+        }
+    }
 
 
 

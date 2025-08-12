@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalle de Publicación</title>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+
+
+<!-- th:object="${newElement} reflejado en Java por ContentSQL -->
+    <form th:action="@{/home/api/content/create/execute}" method="post" th:object="${newElement}">
+        <label>Título:</label>
+        <input type="text" th:field="*{title}" />
+
+        <label>Contenido:</label>
+        <textarea th:field="*{text}"></textarea>
+
+        <button type="submit">Crear</button>
+    </form>
+
+<form th:action="@{/home/api/content}" method="get">
+    <button type="submit">ATRÁS</button>
+</form>
+
+<form th:action="@{/home/api/user/logout}" method="post" th:if="${user.name != null}">
+    <button type="submit">Cerrar sesión</button>
+</form>
+
+</body>
+</html>

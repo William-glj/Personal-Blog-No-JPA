@@ -3,12 +3,17 @@
 <head>
     <meta charset="UTF-8" />
     <title>Home</title>
+    <!--href="@{/css/style.css}" no funciona-->
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
 </head>
 <body>
 
 <h1>Blog personal</h1>
 <h1>Recuerdo de notas</h1>
 
+<!-- Si los campos están en blanco no encontrá la ruta deseada, debido a la falta de parámetros.
+ El fallo no ha sido corregido.-->
+<!-- Formulario de método post que será recogido por otro métodos pos en la ruta -> th:action="@{/home/api/user}" -->
 <form th:action="@{/home/api/user}" method="post" th:object="${userSQL}">
     <label>Nombre:</label>
     <input type="text" th:field="*{name}" />

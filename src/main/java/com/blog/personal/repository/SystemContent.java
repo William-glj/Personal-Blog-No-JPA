@@ -41,6 +41,7 @@ public class SystemContent {
 
     public List<ContentSQL> titleList () throws SQLException {
         ArrayList<ContentSQL> store = new ArrayList<>();
+
         Connection con = dataSource.getConnection();
         Statement sttm = con.createStatement();
         ResultSet rs = sttm.executeQuery("Select id_Publicaciones, titulo, fecha_Creacion from publicaciones ");

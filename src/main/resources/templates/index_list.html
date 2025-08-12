@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
     <title>Lista de Publicaciones</title>
 </head>
 <body>
@@ -8,10 +10,10 @@
 <h1>Lista de Publicaciones</h1>
 <ul>
 
-    <!-- html va interpretar cada comando a través de th: similar a cuando pones <php> .
+    <!-- html va interpretar cada comando a través de th: similar a cuándo pones <php> .
     each es la terminación utilizada para un bucle foreach,
     item es un nuevo objeto o terminación y newlist es el objeto pasado por el model.
-     ${} es la terminación referente para cceder a objetos-->
+     ${} es la terminación referente para acceder a objetos-->
     <li th:each="item : ${newlist}">
         <!-- separado por {''} escribimos la ruta y luego le implementamos el valor del item -->
             <a th:href="@{'/home/api/content/element/' + ${item.id_content}}">
@@ -23,10 +25,19 @@
     </li>
 </ul>
 
-<button onclick="window.location.href='/home/api/content'">Crear</button>
+<th:block th:if="${user != null and user.name == 'administrador'}">
+
+    <form th:action="@{/home/api/content/create}" method="get">
+        <button type="submit">Crear</button>
+    </form>
+
+</th:block>
+
 <form th:action="@{/home/api/user/logout}" method="post" th:if="${user.name != null}">
     <button type="submit">Cerrar sesión</button>
 </form>
+
+
 
 </body>
 </html>

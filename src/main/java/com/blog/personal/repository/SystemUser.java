@@ -45,19 +45,13 @@ public class SystemUser {
 
             ResultSet rs = ps.executeQuery();
 
-            int countUpdate = 0;
-
             if (rs.next()) {
-                countUpdate = rs.getInt(1);
-
-
-
 
                 return new UserSQL(nameEx);
             }
 
 
-
+            rs.close();
             ps.close();
             con.close();
 
@@ -89,7 +83,7 @@ public class SystemUser {
             }
 
 
-
+            rs.close();
             ps.close();
             con.close();
 
