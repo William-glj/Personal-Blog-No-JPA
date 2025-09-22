@@ -52,6 +52,7 @@ public class HomeController {
 
     //Recogemos la información del formulario inicial en index
     //Ruta   localhost:8080/home/api/user
+    //Un fallo sin arreglar es la recogida de valores en el campo. Si están vacios uno o ambos campos dará error.
     @PostMapping("/api/user")
     public String processUserForm(@ModelAttribute UserSQL userSQL) {
         //@ModelAttribute le dice o avisa a Spring que debe recibir un objeto de th.
